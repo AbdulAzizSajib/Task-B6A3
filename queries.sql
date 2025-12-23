@@ -11,7 +11,7 @@ INNER JOIN vehicles
 
 
 
-    SELECT *
+SELECT *
 FROM vehicles as v
 WHERE NOT EXISTS (
     SELECT 1
@@ -28,14 +28,10 @@ WHERE type = 'car'
 
 
 
-SELECT 
-    v.name AS vehicle_name,
-    COUNT(b.booking_id) AS total_bookings
-FROM vehicles v
-INNER JOIN bookings b
-    ON v.vehicle_id = b.vehicle_id
-GROUP BY v.vehicle_id, v.name
-HAVING COUNT(b.booking_id) > 2;
-
+SELECT vehicles.name AS vehicle_name, COUNT(bookings.booking_id) AS total_bookings
+FROM bookings
+INNER JOIN vehicles ON bookings.vehicle_id = vehicles.vehicle_id
+GROUP BY vehicles.vehicle_id, vehicles.name
+HAVING COUNT(bookings.booking_id) > 2;
 
 
