@@ -1,4 +1,5 @@
 
+
 SELECT users.name AS customer_name,
     vehicles.name AS vehicle_name
 FROM bookings
