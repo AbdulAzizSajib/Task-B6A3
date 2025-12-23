@@ -1,6 +1,7 @@
 # Vehicle Rental Database System
 
 ## Overview
+
 This is a SQL database project for managing a vehicle rental system. It includes tables for users, vehicles, and bookings, along with sample data and SQL queries demonstrating various database concepts.
 
 ## Database Schema
@@ -8,6 +9,7 @@ This is a SQL database project for managing a vehicle rental system. It includes
 ### Tables
 
 #### 1. Users Table
+
 Stores customer and admin information.
 
 ```sql
@@ -21,6 +23,7 @@ CREATE TABLE users (
 ```
 
 #### 2. Vehicles Table
+
 Stores information about available vehicles for rent.
 
 ```sql
@@ -36,6 +39,7 @@ CREATE TABLE vehicles (
 ```
 
 #### 3. Bookings Table
+
 Stores rental booking information with foreign key relationships.
 
 ```sql
@@ -52,103 +56,71 @@ CREATE TABLE bookings (
 
 ## Sample Data
 
-### Users
-- Alice (Customer)
-- Bob (Admin)
-- Charlie (Customer)
+### Insert Users
 
-### Vehicles
-- Toyota Corolla (Car) - Available
-- Honda Civic (Car) - Rented
-- Yamaha R15 (Bike) - Available
-- Ford F-150 (Truck) - Under Maintenance
+```sql
+INSERT INTO users (user_id, name, email, phone, role) VALUES
+(1, 'Alice', 'alice@example.com', '1234567890', 'Customer'),
+(2, 'Bob', 'bob@example.com', '0987654321', 'Admin'),
+(3, 'Charlie', 'charlie@example.com', '1122334455', 'Customer');
+```
 
-### Bookings
-- 4 sample bookings with various statuses (completed, confirmed, pending)
+### Insert Vehicles
+
+```sql
+INSERT INTO vehicles (vehicle_id, name, type, model, registration_number, rental_price, status) VALUES
+(1, 'Toyota Corolla', 'car', '2022', 'ABC-123', 50, 'available'),
+(2, 'Honda Civic', 'car', '2021', 'DEF-456', 60, 'rented'),
+(3, 'Yamaha R15', 'bike', '2023', 'GHI-789', 30, 'available'),
+(4, 'Ford F-150', 'truck', '2020', 'JKL-012', 100, 'maintenance');
+```
+
+### Insert Bookings
+
+```sql
+INSERT INTO bookings (booking_id, user_id, vehicle_id, start_date, end_date, status, total_cost) VALUES
+(1, 1, 2, '2023-10-01', '2023-10-05', 'completed', 240),
+(2, 1, 2, '2023-11-01', '2023-11-03', 'completed', 120),
+(3, 3, 2, '2023-12-01', '2023-12-02', 'confirmed', 60),
+(4, 1, 1, '2023-12-10', '2023-12-12', 'pending', 100);
+```
 
 ## SQL Queries
 
 ### Query 1: JOIN
+
 **Objective:** Retrieve booking information along with customer name and vehicle name.
 
 **Concepts:** INNER JOIN
 
-```sql
-SELECT 
-    b.booking_id,
-    u.name AS customer_name,
-    v.name AS vehicle_name,
-    b.start_date,
-    b.end_date,
-    b.status,
-    b.total_cost
-FROM bookings b
-INNER JOIN users u ON b.user_id = u.user_id
-INNER JOIN vehicles v ON b.vehicle_id = v.vehicle_id;
-```
-
 ### Query 2: EXISTS
+
 **Objective:** Find all vehicles that have never been booked.
 
 **Concepts:** NOT EXISTS
 
-```sql
-SELECT 
-    vehicle_id,
-    name,
-    type,
-    registration_number,
-    rental_price,
-    status
-FROM vehicles v
-WHERE NOT EXISTS (
-    SELECT 1 
-    FROM bookings b 
-    WHERE b.vehicle_id = v.vehicle_id
-);
-```
-
 ### Query 3: WHERE
+
 **Objective:** Retrieve all available vehicles of a specific type (e.g., cars).
 
 **Concepts:** SELECT, WHERE
 
-```sql
-SELECT 
-    vehicle_id,
-    name,
-    model,
-    registration_number,
-    rental_price
-FROM vehicles
-WHERE type = 'car' 
-    AND status = 'available';
-```
-
 ### Query 4: GROUP BY and HAVING
+
 **Objective:** Find the total number of bookings for each vehicle and display only those vehicles that have more than 2 bookings.
 
 **Concepts:** GROUP BY, HAVING, COUNT
 
-```sql
-SELECT 
-    v.vehicle_id,
-    v.name AS vehicle_name,
-    COUNT(b.booking_id) AS total_bookings
-FROM vehicles v
-INNER JOIN bookings b ON v.vehicle_id = b.vehicle_id
-GROUP BY v.vehicle_id, v.name
-HAVING COUNT(b.booking_id) > 2;
-```
-
 ## Key Concepts Demonstrated
 
 1. **Database Design**
+
    - Primary Keys (SERIAL)
    - Foreign Key Constraints
    - Data Types (VARCHAR, DECIMAL, DATE, ENUM types)
 
 2. **SQL Operations**
+
    - INNER JOIN - Combining data from multiple tables
    - NOT EXISTS - Subquery for finding non-matching records
    - WHERE - Filtering data based on conditions
